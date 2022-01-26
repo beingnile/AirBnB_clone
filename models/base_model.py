@@ -16,4 +16,5 @@ class BaseModel:
         self.updated_at = datetime.datetime.now()
 
     def to_dict(self):
-        pass
+        self.__dict__['__class__'] = type(self).__name__
+        return self.__dict__

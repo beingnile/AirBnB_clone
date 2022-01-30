@@ -6,8 +6,8 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        return __class__.__objects
+        return FileStorage.__objects
     def new(self, obj):
-        __class__.__objects['obj'] = f'type(self).__name__'
+        FileStorage.__objects['obj'] = f'type(self).__name__'
     def save(self):
-        json.dump(__class__.__objects, __class__.__file_path)
+        json.dump(FileStorage.__objects, FileStorage.__file_path)

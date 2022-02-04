@@ -45,7 +45,7 @@ class BaseModel:
         Returns:
             A dictionary containing all keys/values of __dict__ of the instance
         """
-        my_dict = self.__dict__.copy()
+        my_dict = self.__dict__
         my_dict['created_at'] = self.created_at.isoformat()
         my_dict['updated_at'] = self.updated_at.isoformat()
         my_dict['__class__'] = type(self).__name__

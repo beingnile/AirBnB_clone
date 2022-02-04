@@ -7,10 +7,13 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        return FileStorage.__objects
+        return type(self).__objects
 
     def new(self, obj):
-        FileStorage.__objects['obj'] = f'type(self).__name__'
+        type(self).__objects[type(self).id] = obj
 
     def save(self):
-        json.dump(FileStorage.__objects, FileStorage.__file_path)
+        json.dumps(type(self).__objects, type(self).__file_path)
+
+    def reload(self):
+        json.load(type(self).__file_path)

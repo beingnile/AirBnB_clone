@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 """Defines a base class BaseModel"""
+from models import storage
 from uuid import uuid4
 from datetime import datetime
 
@@ -24,6 +25,7 @@ class BaseModel:
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
+            storage.new()
 
     def __str__(self):
         """Overwrites the inbuilt __str__ method
@@ -36,6 +38,7 @@ class BaseModel:
     def save(self):
         """Updates attribute updated_at with the current datetime"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """

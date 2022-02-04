@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 """Defines a base class BaseModel"""
-import uuid
-import datetime
+from uuid import uuid4
+from datetime import datetime
 
 
 class BaseModel:
@@ -10,19 +10,18 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Runs on instantiation of BaseModel class"""
         sformat = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.datetime.strptime(value, sformat)
+                    self.__dict__[key] = datetime.strptime(value, sformat)
                 else:
                     self.__dict__[key] = value
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.datetime.now()
-
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
 
     def __str__(self):
         """Overwrites the inbuilt __str__ method
@@ -34,7 +33,7 @@ class BaseModel:
 
     def save(self):
         """Updates attribute updated_at with the current datetime"""
-        self.updated_at = datetime.datetime.now()
+        self.updated_at = datetime.now()
 
     def to_dict(self):
         """

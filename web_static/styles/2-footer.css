@@ -1,9 +1,9 @@
 footer {
 	background: #00FF00;
 	height: 60px;
-	vertical-align: middle;
-	width: 100%;
+	line-height: 60px;
 	text-align: center;
+	width: 100%;
 	position: fixed;
 	bottom: 0px;
 }

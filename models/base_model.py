@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """Defines a BaseModel"""
-from datetime import datetime
 import uuid
+from datetime import datetime
+from . import storage
 
 
 class BaseModel:
@@ -19,6 +20,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self)
 
     def __str__(self):
         """Overwrites __str__ to print
@@ -32,6 +34,7 @@ class BaseModel:
         updated_at with the current datetime
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Returns a dictionary containing all

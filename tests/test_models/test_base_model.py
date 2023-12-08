@@ -20,6 +20,25 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.base_model.created_at, datetime)
         self.assertIsInstance(self.base_model.updated_at, datetime)
 
+    def test_init_with_empty_kwargs(self):
+        """Tests the initialization of new objects using kwargs"""
+        kwargs = {}
+        my_model = BaseModel(**kwargs)
+        self.assertIsNotNone(my_model.id)
+        self.assertIsInstance(my_model.created_at, datetime)
+        self.assertIsInstance(my_model.updated_at, datetime)
+
+    def test_init_with_kwargs(self):
+        """Tests the initialization of new objects using kwargs"""
+        kwargs = self.base_model.to_dict()
+        my_model = BaseModel(**kwargs)
+        self.assertIsNotNone(my_model.id)
+        self.assertEqual(my_model.id, self.base_model.id)
+        self.assertIsInstance(my_model.created_at, datetime)
+        self.assertEqual(my_model.created_at, self.base_model.created_at)
+        self.assertIsInstance(my_model.updated_at, datetime)
+        self.assertEqual(my_model.updated_at, self.base_model.updated_at)
+
     @patch('models.base_model.datetime')
     def test_save(self, mock_datetime):
         """Tests the save method. This test case mocks

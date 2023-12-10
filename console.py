@@ -43,10 +43,12 @@ class HBNBCommand(cmd.Cmd):
         """
         if not arg:
             print("** class name missing **")
-        args = arg.split()
-        if len(args) == 1:
+        elif arg == 'BaseModel':
             print("** instance id missing **")
-        elif len(args) == 2:
+        else:
+            print("** class doesn't exist **")
+        args = arg.split()
+        if len(args) == 2:
             if args[0] == 'BaseModel':
                 key = args[0] + '.' + args[1]
                 my_objs = storage.all()
@@ -65,10 +67,12 @@ class HBNBCommand(cmd.Cmd):
         """
         if not arg:
             print("** class name missing **")
-        args = arg.split()
-        if len(args) == 1:
+        elif arg == 'BaseModel':
             print("** instance id missing **")
-        elif len(args) == 2:
+        else:
+            print("** class doesn't exist **")
+        args = arg.split()
+        if len(args) == 2:
             if args[0] == 'BaseModel':
                 key = args[0] + '.' + args[1]
                 try:
@@ -100,6 +104,12 @@ class HBNBCommand(cmd.Cmd):
             print(my_objs_list)
         else:
             print("** class doesn't exist **")
+
+    def do_update(self, arg):
+        """Updates an instance based on the class
+        name and id by adding or updating attribute
+        """
+        pass
 
 
 if __name__ == '__main__':

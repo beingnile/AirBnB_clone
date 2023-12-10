@@ -72,7 +72,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] == 'BaseModel':
                 key = args[0] + '.' + args[1]
                 try:
-                    del(storage.all()[key])
+                    del (storage.all()[key])
                     storage.save()
                 except KeyError:
                     print("** no instance found **")

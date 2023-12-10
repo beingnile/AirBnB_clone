@@ -49,7 +49,6 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 2:
             if args[0] == 'BaseModel':
                 key = args[0] + '.' + args[1]
-                storage.reload()
                 my_objs = storage.all()
                 try:
                     my_dict_obj = my_objs[key]
@@ -72,7 +71,6 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 2:
             if args[0] == 'BaseModel':
                 key = args[0] + '.' + args[1]
-                storage.reload()
                 try:
                     del(storage.all()[key])
                     storage.save()
@@ -80,6 +78,28 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
             else:
                 print("** class doesn't exist **")
+
+    def do_all(self, arg):
+        """Prints all string representation of all
+        instances based or not on the class name
+        """
+        my_objs_list = []
+        my_objs = storage.all()
+        if not arg:
+            for key, value in my_objs.items():
+                new_obj = BaseModel(**value)
+                str_rep = new_obj.__str__()
+                my_objs_list.append(str_rep)
+            print(my_objs_list)
+        elif arg == 'BaseModel':
+            for key, value in my_objs.items():
+                if value.get('__class__') == 'BaseModel':
+                    new_obj = BaseModel(**value)
+                    str_rep = new_obj.__str__()
+                    my_objs_list.append(str_rep)
+            print(my_objs_list)
+        else:
+            print("** class doesn't exist **")
 
 
 if __name__ == '__main__':

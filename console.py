@@ -43,23 +43,26 @@ class HBNBCommand(cmd.Cmd):
         """
         if not arg:
             print("** class name missing **")
-        elif arg == 'BaseModel':
-            print("** instance id missing **")
         else:
-            print("** class doesn't exist **")
-        args = arg.split()
-        if len(args) == 2:
-            if args[0] == 'BaseModel':
-                key = args[0] + '.' + args[1]
-                my_objs = storage.all()
-                try:
-                    my_dict_obj = my_objs[key]
-                    model = BaseModel(**my_dict_obj)
-                    print(model)
-                except KeyError:
-                    print("** no instance found **")
-            else:
-                print("** class doesn't exist **")
+            args = arg.split()
+            if len(args) == 1:
+                token = ''.join(args)
+                if token == 'BaseModel':
+                    print("** instance id missing **")
+                else:
+                    print("** class doesn't exist **")
+            elif len(args) == 2:
+                if args[0] == 'BaseModel':
+                    key = args[0] + '.' + args[1]
+                    my_objs = storage.all()
+                    try:
+                        my_dict_obj = my_objs[key]
+                        model = BaseModel(**my_dict_obj)
+                        print(model)
+                    except KeyError:
+                        print("** no instance found **")
+                else:
+                    print("** class doesn't exist **")
 
     def do_destroy(self, arg):
         """Deletes an instance based on the
@@ -67,21 +70,24 @@ class HBNBCommand(cmd.Cmd):
         """
         if not arg:
             print("** class name missing **")
-        elif arg == 'BaseModel':
-            print("** instance id missing **")
         else:
-            print("** class doesn't exist **")
-        args = arg.split()
-        if len(args) == 2:
-            if args[0] == 'BaseModel':
-                key = args[0] + '.' + args[1]
-                try:
-                    del (storage.all()[key])
-                    storage.save()
-                except KeyError:
-                    print("** no instance found **")
-            else:
-                print("** class doesn't exist **")
+            args = arg.split()
+            if len(args) == 1:
+                token = ''.join(args)
+                if token == 'BaseModel':
+                    print("** instance id missing **")
+                else:
+                    print("** class doesn't exist **")
+            elif len(args) == 2:
+                if args[0] == 'BaseModel':
+                    key = args[0] + '.' + args[1]
+                    try:
+                        del (storage.all()[key])
+                        storage.save()
+                    except KeyError:
+                        print("** no instance found **")
+                else:
+                    print("** class doesn't exist **")
 
     def do_all(self, arg):
         """Prints all string representation of all

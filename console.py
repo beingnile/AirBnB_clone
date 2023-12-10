@@ -17,6 +17,10 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
+    def emptyline(self):
+        """Override empty line to do nothing"""
+        pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

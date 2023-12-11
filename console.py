@@ -115,7 +115,37 @@ class HBNBCommand(cmd.Cmd):
         """Updates an instance based on the class
         name and id by adding or updating attribute
         """
-        pass
+        if not arg:
+            print("** class name missing **")
+        else:
+            args = arg.split()
+            if len(args) == 1:
+                token = ''.join(args)
+                if token == 'BaseModel':
+                    print("** instance id missing **")
+                else:
+                    print("** class doesn't exist **")
+            elif len(args) >= 2:
+                if args[0] == 'BaseModel':
+                    key = args[0] + '.' + args[1]
+                    my_objs = storage.all()
+                    if key in my_objs:
+                        if len(args) == 2:
+                            print("** attribute name missing **")
+                        elif len(args) == 3:
+                            print("** value missing **")
+                        elif len(args) > 3:
+                            attr = args[2]
+                            value = args[3].strip("\"")
+                            my_dict_obj = my_objs[key]
+                            model = BaseModel(**my_dict_obj)
+                            setattr(model, attr, value)
+                            model.save()
+                            storage.new(model)
+                    else:
+                        print("** no instance found **")
+                else:
+                    print("** class doesn't exist **")
 
 
 if __name__ == '__main__':

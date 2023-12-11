@@ -2,7 +2,12 @@
 """Defines a cmd prompt"""
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
+
+
+class_list = ['BaseModel', 'User']
+classes = set(class_list)
 
 
 class HBNBCommand(cmd.Cmd):
@@ -29,8 +34,11 @@ class HBNBCommand(cmd.Cmd):
         """
         if not arg:
             print("** class name missing **")
-        elif arg == 'BaseModel':
-            b = BaseModel()
+        elif arg in classes:
+            if arg == 'BaseModel':
+                b = BaseModel()
+            elif arg == 'User':
+                b = User()
             b.save()
             print(b.id)
         else:
@@ -47,17 +55,20 @@ class HBNBCommand(cmd.Cmd):
             args = arg.split()
             if len(args) == 1:
                 token = ''.join(args)
-                if token == 'BaseModel':
+                if token in classes:
                     print("** instance id missing **")
                 else:
                     print("** class doesn't exist **")
             elif len(args) == 2:
-                if args[0] == 'BaseModel':
+                if args[0] in classes:
                     key = args[0] + '.' + args[1]
                     my_objs = storage.all()
                     try:
                         my_dict_obj = my_objs[key]
-                        model = BaseModel(**my_dict_obj)
+                        if args[0] == 'BaseModel':
+                            model = BaseModel(**my_dict_obj)
+                        elif args[0] == 'User':
+                            model = User(**my_dict_obj)
                         print(model)
                     except KeyError:
                         print("** no instance found **")
@@ -74,12 +85,12 @@ class HBNBCommand(cmd.Cmd):
             args = arg.split()
             if len(args) == 1:
                 token = ''.join(args)
-                if token == 'BaseModel':
+                if token in classes:
                     print("** instance id missing **")
                 else:
                     print("** class doesn't exist **")
             elif len(args) == 2:
-                if args[0] == 'BaseModel':
+                if args[0] in classes:
                     key = args[0] + '.' + args[1]
                     try:
                         del (storage.all()[key])
@@ -97,14 +108,20 @@ class HBNBCommand(cmd.Cmd):
         my_objs = storage.all()
         if not arg:
             for key, value in my_objs.items():
-                new_obj = BaseModel(**value)
+                my_class = value.get('__class__')
+                if my_class == 'BaseModel':
+                    new_obj = BaseModel(**value)
+                elif my_class == 'User':
+                    new_obj = User(**value)
                 str_rep = new_obj.__str__()
                 my_objs_list.append(str_rep)
             print(my_objs_list)
-        elif arg == 'BaseModel':
+        elif arg in classes:
             for key, value in my_objs.items():
-                if value.get('__class__') == 'BaseModel':
+                if value.get('__class__') == arg:
                     new_obj = BaseModel(**value)
+                    if arg == 'User':
+                        new_obj = User(**value)
                     str_rep = new_obj.__str__()
                     my_objs_list.append(str_rep)
             print(my_objs_list)
@@ -121,12 +138,12 @@ class HBNBCommand(cmd.Cmd):
             args = arg.split()
             if len(args) == 1:
                 token = ''.join(args)
-                if token == 'BaseModel':
+                if token in classes:
                     print("** instance id missing **")
                 else:
                     print("** class doesn't exist **")
             elif len(args) >= 2:
-                if args[0] == 'BaseModel':
+                if args[0] in classes:
                     key = args[0] + '.' + args[1]
                     my_objs = storage.all()
                     if key in my_objs:
@@ -138,7 +155,10 @@ class HBNBCommand(cmd.Cmd):
                             attr = args[2]
                             value = args[3].strip("\"")
                             my_dict_obj = my_objs[key]
-                            model = BaseModel(**my_dict_obj)
+                            if args[0] == 'BaseModel':
+                                model = BaseModel(**my_dict_obj)
+                            elif args[0] == 'User':
+                                model = User(**my_dict_obj)
                             setattr(model, attr, value)
                             model.save()
                             storage.new(model)

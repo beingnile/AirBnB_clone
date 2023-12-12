@@ -1,13 +1,19 @@
 #!/usr/bin/python3
 """Defines a cmd prompt"""
 import cmd
+from models.amenity import Amenity
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.user import User
 from models import storage
+from sys import modules
 
 
-class_list = ['BaseModel', 'User']
-classes = set(class_list)
+cls_list = ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']
+classes = set(cls_list)
 
 
 class HBNBCommand(cmd.Cmd):
@@ -35,10 +41,8 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
         elif arg in classes:
-            if arg == 'BaseModel':
-                b = BaseModel()
-            elif arg == 'User':
-                b = User()
+            my_class = getattr(modules[__name__], arg)
+            b = my_class()
             b.save()
             print(b.id)
         else:
@@ -65,10 +69,8 @@ class HBNBCommand(cmd.Cmd):
                     my_objs = storage.all()
                     try:
                         my_dict_obj = my_objs[key]
-                        if args[0] == 'BaseModel':
-                            model = BaseModel(**my_dict_obj)
-                        elif args[0] == 'User':
-                            model = User(**my_dict_obj)
+                        my_class = getattr(modules[__name__], args[0])
+                        model = my_class(**my_dict_obj)
                         print(model)
                     except KeyError:
                         print("** no instance found **")
@@ -108,20 +110,17 @@ class HBNBCommand(cmd.Cmd):
         my_objs = storage.all()
         if not arg:
             for key, value in my_objs.items():
-                my_class = value.get('__class__')
-                if my_class == 'BaseModel':
-                    new_obj = BaseModel(**value)
-                elif my_class == 'User':
-                    new_obj = User(**value)
+                cls = value.get('__class__')
+                my_class = getattr(modules[__name__], cls)
+                new_obj = my_class(**value)
                 str_rep = new_obj.__str__()
                 my_objs_list.append(str_rep)
             print(my_objs_list)
         elif arg in classes:
             for key, value in my_objs.items():
                 if value.get('__class__') == arg:
-                    new_obj = BaseModel(**value)
-                    if arg == 'User':
-                        new_obj = User(**value)
+                    my_class = getattr(modules[__name__], arg)
+                    new_obj = my_class(**value)
                     str_rep = new_obj.__str__()
                     my_objs_list.append(str_rep)
             print(my_objs_list)
@@ -155,10 +154,8 @@ class HBNBCommand(cmd.Cmd):
                             attr = args[2]
                             value = args[3].strip("\"")
                             my_dict_obj = my_objs[key]
-                            if args[0] == 'BaseModel':
-                                model = BaseModel(**my_dict_obj)
-                            elif args[0] == 'User':
-                                model = User(**my_dict_obj)
+                            my_class = getattr(modules[__name__], args[0])
+                            model = my_class(**my_dict_obj)
                             setattr(model, attr, value)
                             model.save()
                             storage.new(model)

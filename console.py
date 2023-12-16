@@ -34,6 +34,16 @@ class HBNBCommand(cmd.Cmd):
         """Override empty line to do nothing"""
         pass
 
+    def default(self, line):
+        """Handles one-liner commands
+        """
+        tokens = line.split('.')
+        if len(tokens) == 2:
+            class_name = tokens[0]
+            command = tokens[1]
+            if command == 'all()':
+                self.do_all(class_name)
+
     def do_create(self, arg):
         """Creates a new instance of a model
         and saves it to a JSON file

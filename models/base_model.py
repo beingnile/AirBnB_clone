@@ -2,13 +2,13 @@
 """Defines a BaseModel"""
 import uuid
 from datetime import datetime
+from . import storage
 
 
 class BaseModel:
     """Defines all common attributes/methods for other classes"""
     def __init__(self, *args, **kwargs):
         """Loads an object from kwargs if not empty"""
-        from . import storage
         if kwargs:
             for key, value in kwargs.items():
                 if key == '__class__':
@@ -33,7 +33,6 @@ class BaseModel:
         """Updates the public instance attribute
         updated_at with the current datetime
         """
-        from . import storage
         self.updated_at = datetime.now()
         storage.save()
 

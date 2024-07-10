@@ -120,14 +120,15 @@ class HBNBCommand(cmd.Cmd):
             for value in my_objs.values():
                 str_rep = value.__str__()
                 my_objs_list.append(str_rep)
+            print(my_objs_list)
         elif arg in classes:
             for value in my_objs.values():
                 if value.to_dict().get('__class__') == arg:
                     str_rep = value.__str__()
                     my_objs_list.append(str_rep)
+            print(my_objs_list)
         else:
             print("** class doesn't exist **")
-        print(my_objs_list)
 
     def do_update(self, arg):
         """Updates an instance based on the class

@@ -40,11 +40,21 @@ class FileStorage:
         If the file doesn’t exist, no exception is raised
         """
         from models.base_model import BaseModel
+        from models.amenity import Amenity
+        from models.base_model import BaseModel
+        from models.city import City
+        from models.place import Place
+        from models.review import Review
+        from models.state import State
+        from models.user import User
+
+        local = locals()
         my_dict = {}
         try:
             with open(FileStorage.__file_path, 'r') as f:
                 my_dict = json.load(f)
             for key, value in my_dict.items():
-                FileStorage.__objects[key] = BaseModel(**value)
+                model = local.get(value['__class__'])
+                FileStorage.__objects[key] = model(**value)
         except Exception:
             pass

@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Defines a class FileStorage"""
 import json
-from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -40,6 +39,7 @@ class FileStorage:
         Otherwise, it does nothing.
         If the file doesn’t exist, no exception is raised
         """
+        from models.base_model import BaseModel
         my_dict = {}
         try:
             with open(FileStorage.__file_path, 'r') as f:

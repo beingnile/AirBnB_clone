@@ -78,9 +78,7 @@ class HBNBCommand(cmd.Cmd):
                     key = args[0] + '.' + args[1]
                     my_objs = storage.all()
                     try:
-                        my_dict_obj = my_objs[key]
-                        my_class = getattr(modules[__name__], args[0])
-                        model = my_class(**my_dict_obj)
+                        model = my_objs[key]
                         print(model)
                     except KeyError:
                         print("** no instance found **")
@@ -119,23 +117,17 @@ class HBNBCommand(cmd.Cmd):
         my_objs_list = []
         my_objs = storage.all()
         if not arg:
-            for key, value in my_objs.items():
-                cls = value.get('__class__')
-                my_class = getattr(modules[__name__], cls)
-                new_obj = my_class(**value)
-                str_rep = new_obj.__str__()
+            for value in my_objs.values():
+                str_rep = value.__str__()
                 my_objs_list.append(str_rep)
-            print(my_objs_list)
         elif arg in classes:
-            for key, value in my_objs.items():
-                if value.get('__class__') == arg:
-                    my_class = getattr(modules[__name__], arg)
-                    new_obj = my_class(**value)
-                    str_rep = new_obj.__str__()
+            for value in my_objs.values():
+                if value.to_dict().get('__class__') == arg:
+                    str_rep = value.__str__()
                     my_objs_list.append(str_rep)
-            print(my_objs_list)
         else:
             print("** class doesn't exist **")
+        print(my_objs_list)
 
     def do_update(self, arg):
         """Updates an instance based on the class
@@ -163,9 +155,7 @@ class HBNBCommand(cmd.Cmd):
                         elif len(args) > 3:
                             attr = args[2]
                             value = args[3].strip("\"")
-                            my_dict_obj = my_objs[key]
-                            my_class = getattr(modules[__name__], args[0])
-                            model = my_class(**my_dict_obj)
+                            model = my_objs[key]
                             setattr(model, attr, value)
                             model.save()
                             storage.new(model)

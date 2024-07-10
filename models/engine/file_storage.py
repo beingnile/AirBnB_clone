@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines a class FileStorage"""
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -19,12 +20,15 @@ class FileStorage:
         <obj class name>.id
         """
         key = f'{obj.__class__.__name__}.{obj.id}'
-        FileStorage.__objects[key] = obj.to_dict()
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """Serializes __objects to the
         JSON file (path: __file_path)
         """
+        for key, value in FileStorage.__objects.items():
+            value = value.to_dict()
+            FileStorage.__objects[key] = value
         with open(FileStorage.__file_path, 'w') as f:
             json.dump(FileStorage.__objects, f)
 
@@ -35,8 +39,11 @@ class FileStorage:
         Otherwise, it does nothing.
         If the file doesn’t exist, no exception is raised
         """
+        my_dict = {}
         try:
             with open(FileStorage.__file_path, 'r') as f:
-                FileStorage.__objects = json.load(f)
+                my_dict = json.load(f)
+            for key, value in my_dict.items():
+                FileStorage.__objects[key] = BaseModel(**value)
         except Exception:
             pass

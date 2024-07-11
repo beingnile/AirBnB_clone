@@ -4,6 +4,7 @@ import unittest
 from models.user import User
 from models.base_model import BaseModel
 
+
 class TestUser(unittest.TestCase):
     """Test cases for the User class"""
     def setUp(self):
@@ -70,6 +71,7 @@ class TestUser(unittest.TestCase):
         self.assertEqual(user_dict['__class__'], 'User')
         self.assertIsInstance(user_dict['created_at'], str)
         self.assertIsInstance(user_dict['updated_at'], str)
+
 
 if __name__ == '__main__':
     unittest.main()

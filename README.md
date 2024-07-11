@@ -12,11 +12,11 @@
 - [Authors](#authors)
 
 ## Introduction
-This project is a simplified version of the AirBnB web application. Somoe featues ae not included.  
-However, the basic functionalities are implemented. It includes a command interpreter for managing the application data, a storage system to persist the data, and various models representing the data structures used in the application.
+This project is a simplified version of the AirBnB web application. Some features are not included.  
+However, the basic functionalities are implemented.The project includes a command interpreter for managing the application data, a storage system to persist the data, and various models representing the data structures used in the application.
 
 ## Features
-- Create, retrieve, update, and delete operations on app data trough a console.
+- Create, retrieve, update, and delete operations on app data through a console.
 - Storage system to persist data using JSON files.
 - Models representing Users, Places, Cities, States, Amenities, and Reviews.
 - Automated unittests for various components of the application.

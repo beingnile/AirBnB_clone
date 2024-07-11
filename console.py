@@ -56,6 +56,10 @@ class HBNBCommand(cmd.Cmd):
             print(cls_list)
         elif command == 'count()':
             print(len(cls_list))
+        elif 'show' in command:
+            model_id = command.strip('show("")')
+            arg = f'{class_name} {model_id}'
+            self.do_show(arg)
 
     def do_create(self, arg):
         """Creates a new instance of a model

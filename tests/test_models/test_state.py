@@ -3,7 +3,6 @@
 import json
 import os
 import unittest
-from models import storage
 from models.base_model import BaseModel
 from models.state import State
 

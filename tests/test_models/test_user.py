@@ -1,29 +1,34 @@
 #!/usr/bin/python3
 """Defines testcases for the user model"""
 import unittest
-from models.user import User
 from models.base_model import BaseModel
+from models.user import User
 
 
 class TestUser(unittest.TestCase):
-    """Test cases for the User class"""
+    """Testcases for the User class"""
     def setUp(self):
-        """Set up test methods"""
+        """Sets up test methods"""
         self.user = User()
 
+    def tearDown(self):
+        """Tears down test methods"""
+        if os.path.exists("file.json"):
+            os.remove("file.json")
+
     def test_instance(self):
-        """Test that user is an instance of BaseModel"""
+        """Tests that user is an instance of BaseModel"""
         self.assertIsInstance(self.user, BaseModel)
 
     def test_default_attributes(self):
-        """Test default attributes are empty strings"""
+        """Tests default attributes are empty strings"""
         self.assertEqual(self.user.email, "")
         self.assertEqual(self.user.password, "")
         self.assertEqual(self.user.first_name, "")
         self.assertEqual(self.user.last_name, "")
 
     def test_set_attributes(self):
-        """Test setting attributes"""
+        """Tests setting attributes"""
         self.user.email = "test@example.com"
         self.user.password = "password"
         self.user.first_name = "John"
@@ -34,14 +39,14 @@ class TestUser(unittest.TestCase):
         self.assertEqual(self.user.last_name, "Doe")
 
     def test_attributes_types(self):
-        """Test attribute types"""
+        """Tests attribute types"""
         self.assertIsInstance(self.user.email, str)
         self.assertIsInstance(self.user.password, str)
         self.assertIsInstance(self.user.first_name, str)
         self.assertIsInstance(self.user.last_name, str)
 
     def test_none_attributes(self):
-        """Test setting attributes to None"""
+        """Tests setting attributes to None"""
         self.user.email = None
         self.user.password = None
         self.user.first_name = None
@@ -52,13 +57,13 @@ class TestUser(unittest.TestCase):
         self.assertIsNone(self.user.last_name)
 
     def test_save_method(self):
-        """Test save method from BaseModel"""
+        """Tests save method from BaseModel"""
         old_updated_at = self.user.updated_at
         self.user.save()
         self.assertNotEqual(old_updated_at, self.user.updated_at)
 
     def test_to_dict_method(self):
-        """Test to_dict method from BaseModel"""
+        """Tests to_dict method from BaseModel"""
         self.user.email = "test@example.com"
         self.user.password = "password"
         self.user.first_name = "John"
@@ -71,6 +76,15 @@ class TestUser(unittest.TestCase):
         self.assertEqual(user_dict['__class__'], 'User')
         self.assertIsInstance(user_dict['created_at'], str)
         self.assertIsInstance(user_dict['updated_at'], str)
+
+    def test_save_to_file(self):
+        """Tests if the user is saved to the file"""
+        self.user.save()
+        self.assertTrue(os.path.exists("file.json"))
+        with open("file.json", "r") as file:
+            data = json.load(file)
+            key = f"User.{self.user.id}"
+            self.assertIn(key, data)
 
 
 if __name__ == '__main__':

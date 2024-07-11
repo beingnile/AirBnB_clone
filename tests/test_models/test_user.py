@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """Defines testcases for the user model"""
+import json
+import os
 import unittest
 from models.base_model import BaseModel
 from models.user import User

@@ -1,23 +1,29 @@
 #!/usr/bin/python3
 """Defines testcases for place model"""
+import json
+import os
 import unittest
-from models.place import Place
 from models.base_model import BaseModel
+from models.place import Place
 
 
 class TestPlace(unittest.TestCase):
-    """Test cases for the Place class"""
-
+    """Tests cases for the Place class"""
     def setUp(self):
-        """Set up test methods"""
+        """Sets up test methods"""
         self.place = Place()
 
+    def tearDown(self):
+        """Tears down test methods"""
+        if os.path.exists("file.json"):
+            os.remove("file.json")
+
     def test_instance(self):
-        """Test that place is an instance of BaseModel"""
+        """Tests that place is an instance of BaseModel"""
         self.assertIsInstance(self.place, BaseModel)
 
     def test_default_attributes(self):
-        """Test default attributes are correctly set"""
+        """Tests default attributes are correctly set"""
         self.assertEqual(self.place.city_id, "")
         self.assertEqual(self.place.user_id, "")
         self.assertEqual(self.place.name, "")
@@ -31,7 +37,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(self.place.amenity_ids, [])
 
     def test_set_attributes(self):
-        """Test setting attributes"""
+        """Tests setting attributes"""
         self.place.city_id = "1234"
         self.place.user_id = "5678"
         self.place.name = "Cool Place"
@@ -57,7 +63,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(self.place.amenity_ids, ["wifi", "tv"])
 
     def test_attributes_types(self):
-        """Test attribute types"""
+        """Tests attribute types"""
         self.assertIsInstance(self.place.city_id, str)
         self.assertIsInstance(self.place.user_id, str)
         self.assertIsInstance(self.place.name, str)
@@ -71,7 +77,7 @@ class TestPlace(unittest.TestCase):
         self.assertIsInstance(self.place.amenity_ids, list)
 
     def test_none_attributes(self):
-        """Test setting attributes to None"""
+        """Tests setting attributes to None"""
         self.place.city_id = None
         self.place.user_id = None
         self.place.name = None
@@ -97,13 +103,13 @@ class TestPlace(unittest.TestCase):
         self.assertIsNone(self.place.amenity_ids)
 
     def test_save_method(self):
-        """Test save method from BaseModel"""
+        """Tests save method from BaseModel"""
         old_updated_at = self.place.updated_at
         self.place.save()
         self.assertNotEqual(old_updated_at, self.place.updated_at)
 
     def test_to_dict_method(self):
-        """Test to_dict method from BaseModel"""
+        """Tests to_dict method from BaseModel"""
         self.place.city_id = "1234"
         self.place.user_id = "5678"
         self.place.name = "Cool Place"
@@ -131,6 +137,15 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(place_dict['__class__'], 'Place')
         self.assertIsInstance(place_dict['created_at'], str)
         self.assertIsInstance(place_dict['updated_at'], str)
+
+    def test_save_to_file(self):
+        """Tests if the place is saved to the file"""
+        self.place.save()
+        self.assertTrue(os.path.exists("file.json"))
+        with open("file.json", "r") as file:
+            data = json.load(file)
+            key = f"Place.{self.place.id}"
+            self.assertIn(key, data)
 
 
 if __name__ == '__main__':

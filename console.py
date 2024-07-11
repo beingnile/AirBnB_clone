@@ -60,6 +60,10 @@ class HBNBCommand(cmd.Cmd):
             model_id = command.strip('show("")')
             arg = f'{class_name} {model_id}'
             self.do_show(arg)
+        elif 'destroy' in command:
+            model_id = command.strip('destroy("")')
+            arg = f'{class_name} {model_id}'
+            self.do_destroy(arg)
 
     def do_create(self, arg):
         """Creates a new instance of a model

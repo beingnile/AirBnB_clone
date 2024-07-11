@@ -57,19 +57,33 @@ class HBNBCommand(cmd.Cmd):
         elif command == 'count()':
             print(len(cls_list))
         elif 'show' in command:
-            model_id = command.strip('show("")')
+            model_id = command.strip('show').strip('("")')
             arg = f'{class_name} {model_id}'
             self.do_show(arg)
         elif 'destroy' in command:
-            model_id = command.strip('destroy("")')
+            model_id = command.strip('destroy').strip('("")')
             arg = f'{class_name} {model_id}'
             self.do_destroy(arg)
         elif 'update' in command:
-            args = command.strip('update()').split(',')
-            unparsed = [x.strip('\"\' ') for x in args]
-            parsed = ' '.join(unparsed)
-            arg = f'{class_name} {parsed}'
-            self.do_update(arg)
+            args = ast.literal_eval(command.strip('update()'))
+            args_lst = list(args)
+            if type(args_lst[1]) == dict:
+                model_id = args_lst[0].strip('\"\' ')
+                mydict = args_lst[1]
+                for key, value in mydict.items():
+                    attr = key.strip('\"\' ')
+                    try:
+                        val = value.strip('\"\' ')
+                    except Exception:
+                        val = value
+                    arg = f'{class_name} {model_id} {attr} {value}'
+                    self.do_update(arg)
+            else:
+                args = command.strip('update()').split(',')
+                unparsed = [x.strip('\"\' ') for x in args]
+                parsed = ' '.join(unparsed)
+                arg = f'{class_name} {parsed}'
+                self.do_update(arg)
 
     def do_create(self, arg):
         """Creates a new instance of a model

@@ -79,8 +79,7 @@ class HBNBCommand(cmd.Cmd):
                     arg = f'{class_name} {model_id} {attr} {value}'
                     self.do_update(arg)
             else:
-                args = command.strip('update()').split(',')
-                unparsed = [x.strip('\"\' ') for x in args]
+                unparsed = [x.strip('\"\' ') for x in args_lst]
                 parsed = ' '.join(unparsed)
                 arg = f'{class_name} {parsed}'
                 self.do_update(arg)

@@ -37,12 +37,25 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """Handles one-liner commands
         """
+        import ast
+        import sys
+        from io import StringIO
         tokens = line.split('.')
-        if len(tokens) == 2:
-            class_name = tokens[0]
-            command = tokens[1]
-            if command == 'all()':
-                self.do_all(class_name)
+        if len(tokens) != 2:
+            return
+
+        class_name = tokens[0]
+        command = tokens[1]
+        buf = StringIO()
+        stdout = sys.stdout
+        sys.stdout = buf
+        self.do_all(class_name)
+        sys.stdout = stdout
+        cls_list = ast.literal_eval(buf.getvalue().strip())
+        if command == 'all()':
+            print(cls_list)
+        elif command == 'count()':
+            print(len(cls_list))
 
     def do_create(self, arg):
         """Creates a new instance of a model

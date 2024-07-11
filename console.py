@@ -64,6 +64,12 @@ class HBNBCommand(cmd.Cmd):
             model_id = command.strip('destroy("")')
             arg = f'{class_name} {model_id}'
             self.do_destroy(arg)
+        elif 'update' in command:
+            args = command.strip('update()').split(',')
+            unparsed = [x.strip('\"\' ') for x in args]
+            parsed = ' '.join(unparsed)
+            arg = f'{class_name} {parsed}'
+            self.do_update(arg)
 
     def do_create(self, arg):
         """Creates a new instance of a model

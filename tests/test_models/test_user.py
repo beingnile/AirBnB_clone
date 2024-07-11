@@ -3,25 +3,30 @@
 import unittest
 from models.user import User
 from models.base_model import BaseModel
-from datetime import datetime
 
 class TestUser(unittest.TestCase):
     """Test cases for the User class"""
-
     def setUp(self):
         """Set up test methods"""
         self.user = User()
-        self.user.email = "test@example.com"
-        self.user.password = "password"
-        self.user.first_name = "John"
-        self.user.last_name = "Doe"
 
     def test_instance(self):
         """Test that user is an instance of BaseModel"""
         self.assertIsInstance(self.user, BaseModel)
 
-    def test_attributes(self):
-        """Test attributes of the User class"""
+    def test_default_attributes(self):
+        """Test default attributes are empty strings"""
+        self.assertEqual(self.user.email, "")
+        self.assertEqual(self.user.password, "")
+        self.assertEqual(self.user.first_name, "")
+        self.assertEqual(self.user.last_name, "")
+
+    def test_set_attributes(self):
+        """Test setting attributes"""
+        self.user.email = "test@example.com"
+        self.user.password = "password"
+        self.user.first_name = "John"
+        self.user.last_name = "Doe"
         self.assertEqual(self.user.email, "test@example.com")
         self.assertEqual(self.user.password, "password")
         self.assertEqual(self.user.first_name, "John")
@@ -34,6 +39,17 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(self.user.first_name, str)
         self.assertIsInstance(self.user.last_name, str)
 
+    def test_none_attributes(self):
+        """Test setting attributes to None"""
+        self.user.email = None
+        self.user.password = None
+        self.user.first_name = None
+        self.user.last_name = None
+        self.assertIsNone(self.user.email)
+        self.assertIsNone(self.user.password)
+        self.assertIsNone(self.user.first_name)
+        self.assertIsNone(self.user.last_name)
+
     def test_save_method(self):
         """Test save method from BaseModel"""
         old_updated_at = self.user.updated_at
@@ -42,6 +58,10 @@ class TestUser(unittest.TestCase):
 
     def test_to_dict_method(self):
         """Test to_dict method from BaseModel"""
+        self.user.email = "test@example.com"
+        self.user.password = "password"
+        self.user.first_name = "John"
+        self.user.last_name = "Doe"
         user_dict = self.user.to_dict()
         self.assertEqual(user_dict['email'], "test@example.com")
         self.assertEqual(user_dict['password'], "password")

@@ -36,7 +36,7 @@ class TestHBNBCommand(unittest.TestCase):
     def test_emptyline(self):
         """Tests empty line input"""
         with patch('sys.stdout', new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd(""))
+            self.assertFalse(HBNBCommand().onecmd("\n"))
 
     def test_help(self):
         """Tests help command"""

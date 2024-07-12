@@ -92,14 +92,16 @@ class TestHBNBCommand(unittest.TestCase):
         for model in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 HBNBCommand().onecmd(f"show {model}")
-                self.assertEqual(f.getvalue().strip(), "** instance id missing **")
+                err_str = "** instance id missing **"
+                self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_show_invalid_id(self):
         """Tests show command with invalid id"""
         for model in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 HBNBCommand().onecmd(f"show {model} 1234")
-                self.assertEqual(f.getvalue().strip(), "** no instance found **")
+                err_str = "** no instance found **"
+                self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_show_valid(self):
         """Tests show command with valid class and id"""
@@ -109,7 +111,8 @@ class TestHBNBCommand(unittest.TestCase):
                 mod_id = f.getvalue().strip()
                 with patch('sys.stdout', new=StringIO()) as f:
                     HBNBCommand().onecmd(f"show {model} {mod_id}")
-                    self.assertIn(f"[{model}] ({mod_id})", f.getvalue().strip())
+                    test_str = f"[{model}] ({mod_id})"
+                    self.assertIn(test_str, f.getvalue().strip())
 
     def test_destroy_missing_class(self):
         """Tests destroy command with missing class"""
@@ -128,14 +131,16 @@ class TestHBNBCommand(unittest.TestCase):
         for model in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 HBNBCommand().onecmd(f"destroy {model}")
-                self.assertEqual(f.getvalue().strip(), "** instance id missing **")
+                err_str = "** instance id missing **"
+                self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_destroy_invalid_id(self):
         """Tests destroy command with invalid id"""
         for model in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 HBNBCommand().onecmd(f"destroy {model} 1234")
-                self.assertEqual(f.getvalue().strip(), "** no instance found **")
+                err_str = "** no instance found **"
+                self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_destroy_valid(self):
         """Tests destroy command with valid class and id"""
@@ -188,14 +193,16 @@ class TestHBNBCommand(unittest.TestCase):
         for model in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 HBNBCommand().onecmd(f"update {model}")
-                self.assertEqual(f.getvalue().strip(), "** instance id missing **")
+                err_str = "** instance id missing **"
+                self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_update_invalid_id(self):
         """Tests update command with invalid id"""
         for model in classes:
             with patch('sys.stdout', new=StringIO()) as f:
                 HBNBCommand().onecmd(f"update {model} 1234")
-                self.assertEqual(f.getvalue().strip(), "** no instance found **")
+                err_str = "** no instance found **"
+                self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_update_missing_attribute(self):
         """Tests update command with missing attribute"""
@@ -216,7 +223,8 @@ class TestHBNBCommand(unittest.TestCase):
                 mod_id = f.getvalue().strip()
                 with patch('sys.stdout', new=StringIO()) as f:
                     HBNBCommand().onecmd(f"update {model} {mod_id} attr")
-                    self.assertEqual(f.getvalue().strip(), "** value missing **")
+                    err_str = "** value missing **"
+                    self.assertEqual(f.getvalue().strip(), err_str)
 
     def test_update_valid(self):
         """Tests update command with valid class, id, attribute and value"""
@@ -248,7 +256,8 @@ class TestHBNBCommand(unittest.TestCase):
                 mod_id = f.getvalue().strip()
                 with patch('sys.stdout', new=StringIO()) as f:
                     HBNBCommand().onecmd(f'{model}.show("{mod_id}")')
-                    self.assertIn(f"[{model}] ({mod_id})", f.getvalue().strip())
+                    test_str = f"[{model}] ({mod_id})"
+                    self.assertIn(test_str, f.getvalue().strip())
 
     def test_destroy_command_with_dot_notation(self):
         """Tests destroy command with dot notation"""
@@ -285,17 +294,17 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_update_command_with_dict_dot_notation(self):
         """Tests update command with dictionary and dot notation"""
-        for model in classes:
+        for mdl in classes:
             with patch('sys.stdout', new=StringIO()) as f:
-                HBNBCommand().onecmd(f"create {model}")
-                mod_id = f.getvalue().strip()
+                HBNBCommand().onecmd(f"create {mdl}")
+                mid = f.getvalue().strip()
                 with patch('sys.stdout', new=StringIO()) as f:
-                    s = f'{model}.update("{mod_id}", {{"attr1": "test", "attr": "t2"}})'
+                    s = f'{mdl}.update("{mid}", {{"attr": "t1", "att": "t2"}})'
                     HBNBCommand().onecmd(s)
                     self.assertEqual(f.getvalue().strip(), "")
-                    mod = storage.all()[f"{model}.{mod_id}"]
-                    self.assertEqual(mod.attr1, "test")
-                    self.assertEqual(mod.attr, "t2")
+                    mod = storage.all()[f"{mdl}.{mid}"]
+                    self.assertEqual(mod.attr, "t1")
+                    self.assertEqual(mod.att, "t2")
 
 
 if __name__ == '__main__':

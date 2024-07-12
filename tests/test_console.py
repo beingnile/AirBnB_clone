@@ -38,6 +38,17 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd(""))
 
+    def test_help(self):
+        """Tests help command"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            test_str = (
+                "Documented commands (type help <topic>):\n"
+                "========================================\n"
+                "EOF  all  create  destroy  help  quit  show  update"
+            )
+            HBNBCommand().onecmd("help")
+            self.assertEqual(f.getvalue().strip(), test_str)
+
     def test_create_missing_class(self):
         """Tests create command with missing class"""
         with patch('sys.stdout', new=StringIO()) as f:
